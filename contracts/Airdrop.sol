@@ -3,7 +3,7 @@ pragma solidity 0.6.12;
 import "@openzeppelin/contracts/cryptography/MerkleProof.sol";
 import "@openzeppelin/contracts/token/ERC20/IERC20.sol";
 
-contract CoordinapeAirdrop {
+contract Airdrop {
 	using MerkleProof for bytes32[];
 
 	IERC20 public token;
@@ -42,12 +42,12 @@ contract CoordinapeAirdrop {
 	}
 
 	function claim(uint256 _index, address _account, uint256 _amount, bytes32[] memory _proof) external {
-		require(!isClaimed(_index), "CoordinapeAirdrop: Claimed already");
+		require(!isClaimed(_index), "Airdrop: Claimed already");
 		bytes32 node = keccak256(abi.encodePacked(_account, _amount, _index));
-		require(_proof.verify(merkleRoot, node), "CoordinapeAirdrop: Wrong proof");
+		require(_proof.verify(merkleRoot, node), "Airdrop: Wrong proof");
 		
 		_setClaimed(_index);
-		require(token.transfer(_account, _amount), "CoordinapeAirdrop: Token transfer failed");
+		require(token.transfer(_account, _amount), "Airdrop: Token transfer failed");
 		emit Claimed(_index, _account, _amount);
 	}
 }
